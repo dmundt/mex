@@ -144,7 +144,7 @@ func capabilityNames(capabilities *mcp.ServerCapabilities) []string {
 	if capabilities.Completions != nil {
 		names = append(names, "completions")
 	}
-	if capabilities.Logging != nil {
+	if capabilities.Logging != nil { //nolint:staticcheck // logging is deprecated in the SDK but servers may still advertise it
 		names = append(names, "logging")
 	}
 	if capabilities.Prompts != nil {

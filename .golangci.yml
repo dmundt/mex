@@ -1,0 +1,27 @@
+# golangci-lint configuration (v2).
+# See https://golangci-lint.run/usage/configuration/
+
+version: "2"
+
+run:
+  timeout: 5m
+
+formatters:
+  enable:
+    - gofmt
+
+linters:
+  default: none
+  enable:
+    - govet
+    - staticcheck
+    - ineffassign
+    - unused
+    - misspell
+  settings:
+    staticcheck:
+      # Error messages are ported verbatim from the Python reference
+      # (capitalization and trailing punctuation are intentional).
+      checks:
+        - all
+        - "-ST1005"

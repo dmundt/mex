@@ -214,7 +214,7 @@ func TestRenderCallResult(t *testing.T) {
 		{
 			name: "unknown content type falls to JSON",
 			result: &mcp.CallToolResult{Content: []mcp.Content{
-				&mcp.ToolUseContent{Name: "t", Input: map[string]any{"a": float64(1)}},
+				&mcp.ToolUseContent{Name: "t", Input: map[string]any{"a": float64(1)}}, //nolint:staticcheck // deprecated in SDK; still a valid content type
 			}},
 			want: "Content:\n",
 		},

@@ -13,7 +13,7 @@ func TestCapabilityNames(t *testing.T) {
 	}
 	all := &mcp.ServerCapabilities{
 		Completions: &mcp.CompletionCapabilities{},
-		Logging:     &mcp.LoggingCapabilities{},
+		Logging:     &mcp.LoggingCapabilities{}, //nolint:staticcheck // deprecated in SDK; doctor still reports it
 		Prompts:     &mcp.PromptCapabilities{},
 		Resources:   &mcp.ResourceCapabilities{},
 		Tools:       &mcp.ToolCapabilities{},

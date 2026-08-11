@@ -204,11 +204,16 @@ func parseURL(url string) (scheme string, err error) {
 	}
 	scheme = url[:colon]
 	for _, r := range scheme {
-		if !(r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '+' || r == '-' || r == '.') {
+		if !isSchemeChar(r) {
 			return "", fmt.Errorf("invalid scheme in URL %q", url)
 		}
 	}
 	return scheme, nil
+}
+
+// isSchemeChar reports whether r is valid in a URL scheme per RFC 3986.
+func isSchemeChar(r rune) bool {
+	return r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '+' || r == '-' || r == '.'
 }
 
 // newTransport builds the SDK transport for the given server, which is either a

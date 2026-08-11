@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/spf13/cobra"
@@ -11,6 +12,7 @@ import (
 
 // fakeClient is a scriptable MCPClient for command tests.
 type fakeClient struct {
+	mu        sync.Mutex
 	tools     []*mcp.Tool
 	prompts   []*mcp.Prompt
 	resources []*mcp.Resource
@@ -29,7 +31,17 @@ func newFakeClient(tools []*mcp.Tool, pageSize int) *fakeClient {
 	return &fakeClient{tools: tools, pageSize: pageSize}
 }
 
+// setInfo stores the client info. It is safe for concurrent use, which the
+// doctor command exercises by connecting from two goroutines at once.
+func (f *fakeClient) setInfo(info Info) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.info = info
+}
+
 func (f *fakeClient) Info() Info {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.info
 }
 

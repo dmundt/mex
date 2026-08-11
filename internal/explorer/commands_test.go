@@ -16,7 +16,7 @@ func installNewClient(t *testing.T, fake *fakeClient) {
 	t.Helper()
 	orig := NewClient
 	NewClient = func(opts ClientOptions) (MCPClient, error) {
-		fake.info = Info{
+		fake.setInfo(Info{
 			URL:               opts.URL,
 			Mode:              "stateless",
 			Negotiation:       "server/discover",
@@ -24,7 +24,7 @@ func installNewClient(t *testing.T, fake *fakeClient) {
 			SupportedVersions: []string{statelessProtocolVersion},
 			ServerInfo:        &mcp.Implementation{Name: "fake", Version: "1.0"},
 			Capabilities:      &mcp.ServerCapabilities{Tools: &mcp.ToolCapabilities{}},
-		}
+		})
 		return fake, nil
 	}
 	t.Cleanup(func() { NewClient = orig })
