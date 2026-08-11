@@ -23,21 +23,21 @@ func TestParseCallArgs(t *testing.T) {
 			wantPos: []string{"http://x", "tool"},
 		},
 		{
-			name:      "json flag",
-			args:      []string{"http://x", "tool", "--json"},
-			wantPos:   []string{"http://x", "tool"},
-			wantJSON:  true,
+			name:     "json flag",
+			args:     []string{"http://x", "tool", "--json"},
+			wantPos:  []string{"http://x", "tool"},
+			wantJSON: true,
 		},
 		{
-			name:     "two arguments",
-			args:     []string{"-a", "name", "value", "--argument", "x", "1", "http://x", "tool"},
-			wantPos:  []string{"http://x", "tool"},
+			name:      "two arguments",
+			args:      []string{"-a", "name", "value", "--argument", "x", "1", "http://x", "tool"},
+			wantPos:   []string{"http://x", "tool"},
 			wantPairs: [][2]string{{"name", "value"}, {"x", "1"}},
 		},
 		{
-			name:     "option value looks like flag",
-			args:     []string{"--argument", "query", "--yes", "http://x", "tool"},
-			wantPos:  []string{"http://x", "tool"},
+			name:      "option value looks like flag",
+			args:      []string{"--argument", "query", "--yes", "http://x", "tool"},
+			wantPos:   []string{"http://x", "tool"},
 			wantPairs: [][2]string{{"query", "--yes"}},
 		},
 		{
@@ -47,9 +47,9 @@ func TestParseCallArgs(t *testing.T) {
 			wantLegacy: true,
 		},
 		{
-			name:     "double dash stops parsing",
-			args:     []string{"http://x", "tool", "--", "--json"},
-			wantPos:  []string{"http://x", "tool", "--json"},
+			name:    "double dash stops parsing",
+			args:    []string{"http://x", "tool", "--", "--json"},
+			wantPos: []string{"http://x", "tool", "--json"},
 		},
 		{
 			name:    "unknown option",
@@ -62,8 +62,8 @@ func TestParseCallArgs(t *testing.T) {
 			wantErr: "requires 2 arguments",
 		},
 		{
-			name:    "help flag",
-			args:    []string{"-h"},
+			name:     "help flag",
+			args:     []string{"-h"},
 			wantHelp: true,
 		},
 	}

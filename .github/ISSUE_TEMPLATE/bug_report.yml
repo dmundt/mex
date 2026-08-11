@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a bug in mcp-explorer
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: mcp-explorer version
+      description: Output of `mcp-explorer --version`
+    validations:
+      required: true
+  - type: input
+    id: server
+    attributes:
+      label: Server URL or stdio command
+      description: The MCP server you connected to, or omit if not applicable.
+    validations:
+      required: false
+  - type: textarea
+    id: command
+    attributes:
+      label: Command run
+      description: Exact command you invoked, including options.
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+      description: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+      description: What did mcp-explorer produce? Paste stdout/stderr or error output.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Go version (if built from source).
+      placeholder: |
+        - OS: Windows 11
+        - Go: 1.26
+    validations:
+      required: false

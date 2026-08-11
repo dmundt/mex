@@ -11,10 +11,10 @@ import (
 
 // discoverResponse is the shape of a server/discover result.
 type discoverResponse struct {
-	SupportedVersions []string         `json:"supportedVersions"`
+	SupportedVersions []string                `json:"supportedVersions"`
 	Capabilities      *mcp.ServerCapabilities `json:"capabilities"`
-	Instructions      string           `json:"instructions"`
-	Meta              map[string]any   `json:"_meta,omitempty"`
+	Instructions      string                  `json:"instructions"`
+	Meta              map[string]any          `json:"_meta,omitempty"`
 }
 
 // fetchServerInfo returns protocol and server metadata for the selected mode.

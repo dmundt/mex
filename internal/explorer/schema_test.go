@@ -31,12 +31,12 @@ func TestShortSchemaType(t *testing.T) {
 
 func TestSchemaTypeDetails(t *testing.T) {
 	schema := map[string]any{
-		"type":        "integer",
-		"minimum":     float64(1),
-		"maximum":     float64(10),
-		"default":     float64(5),
-		"enum":        []any{float64(1), float64(2)},
-		"pattern":     "^[0-9]+$",
+		"type":    "integer",
+		"minimum": float64(1),
+		"maximum": float64(10),
+		"default": float64(5),
+		"enum":    []any{float64(1), float64(2)},
+		"pattern": "^[0-9]+$",
 	}
 	got := schemaType(schema)
 	for _, want := range []string{"integer", ">= 1", "<= 10", "default 5", "one of 1, 2", "pattern constrained"} {
@@ -137,11 +137,11 @@ func TestBuildArguments(t *testing.T) {
 	inputSchema := map[string]any{
 		"type": "object",
 		"properties": map[string]any{
-			"name": map[string]any{"type": "string"},
+			"name":  map[string]any{"type": "string"},
 			"count": map[string]any{"type": "integer"},
 			"tags":  map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
 		},
-		"required": []any{"name"},
+		"required":             []any{"name"},
 		"additionalProperties": false,
 	}
 
@@ -158,10 +158,10 @@ func TestBuildArguments(t *testing.T) {
 			want:  map[string]any{"name": "bob", "count": float64(3), "tags": []any{"a"}},
 		},
 		{
-			name:  "json overrides pairs",
+			name:    "json overrides pairs",
 			jsonArg: ptr(`{"name": "alice", "count": 2}`),
-			pairs: [][2]string{{"count", "9"}},
-			want:  map[string]any{"name": "alice", "count": float64(9)},
+			pairs:   [][2]string{{"count", "9"}},
+			want:    map[string]any{"name": "alice", "count": float64(9)},
 		},
 		{
 			name:    "missing required",
@@ -238,7 +238,9 @@ func TestToolInputSchema(t *testing.T) {
 		t.Errorf("toolInputSchema(bad raw) = %v, want empty map", got)
 	}
 
-	structSchema := &mcp.Tool{Name: "t", InputSchema: struct{ Type string `json:"type"` }{Type: "object"}}
+	structSchema := &mcp.Tool{Name: "t", InputSchema: struct {
+		Type string `json:"type"`
+	}{Type: "object"}}
 	if got := toolInputSchema(structSchema); got["type"] != "object" {
 		t.Errorf("toolInputSchema(struct) = %v, want type object", got)
 	}

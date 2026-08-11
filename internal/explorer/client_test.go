@@ -77,9 +77,9 @@ func TestNewCommandTransportErrors(t *testing.T) {
 
 func TestParseURL(t *testing.T) {
 	for url, wantScheme := range map[string]string{
-		"http://x":    "http",
-		"ws://x":      "ws",
-		"stdio:":      "stdio",
+		"http://x": "http",
+		"ws://x":   "ws",
+		"stdio:":   "stdio",
 	} {
 		got, err := parseURL(url)
 		if err != nil {

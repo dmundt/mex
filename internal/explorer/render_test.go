@@ -14,7 +14,7 @@ func TestRenderToolList(t *testing.T) {
 			Title:       "Add",
 			Description: "Add two numbers",
 			InputSchema: map[string]any{
-				"type":     "object",
+				"type": "object",
 				"properties": map[string]any{
 					"a": map[string]any{"type": "integer"},
 					"b": map[string]any{"type": "integer"},
@@ -88,7 +88,7 @@ func TestRenderToolInspect(t *testing.T) {
 		Name:        "add",
 		Description: "Add digits",
 		InputSchema: map[string]any{
-			"type":     "object",
+			"type": "object",
 			"properties": map[string]any{
 				"a": map[string]any{"type": "integer"},
 			},
@@ -117,7 +117,7 @@ func TestRenderPromptList(t *testing.T) {
 			},
 		},
 		{
-			Name: "noparams",
+			Name:      "noparams",
 			Arguments: nil,
 		},
 	}
@@ -165,9 +165,9 @@ func TestRenderCallResult(t *testing.T) {
 			want: "hello\n",
 		},
 		{
-			name: "structured",
+			name:   "structured",
 			result: &mcp.CallToolResult{StructuredContent: map[string]any{"ok": true}},
-			want: "Structured content:\n",
+			want:   "Structured content:\n",
 		},
 		{
 			name: "image",

@@ -1,5 +1,7 @@
 # mcp-explorer
 
+[![CI](https://github.com/dmundt/mcp-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/dmundt/mcp-explorer/actions/workflows/ci.yml)
+
 A Go command-line tool for exploring, inspecting, and invoking the tools,
 prompts, and resources exposed by [Model Context Protocol (MCP)][mcp] servers,
 over Streamable HTTP or stdio.
