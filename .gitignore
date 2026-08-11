@@ -1,5 +1,5 @@
 # Build artifacts
-mcp-explorer.exe
+mex.exe
 cov
 *.out
 

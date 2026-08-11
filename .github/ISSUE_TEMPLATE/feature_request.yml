@@ -6,7 +6,7 @@ body:
     id: motivation
     attributes:
       label: Motivation
-      description: What problem does this solve? Note that mcp-explorer is a Go port of Simon Willison's mcp-explorer — features beyond parity with the reference implementation are out of scope unless justified.
+      description: What problem does this solve? Note that mex is a Go port of Simon Willison's mcp-explorer — features beyond parity with the reference implementation are out of scope unless justified.
     validations:
       required: true
   - type: textarea

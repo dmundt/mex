@@ -1,4 +1,4 @@
-// Package explorer implements the mcp-explorer command line tool.
+// Package explorer implements the mex command line tool.
 //
 // It explores, inspects, and invokes tools, prompts, and resources exposed by
 // Model Context Protocol (MCP) servers.
@@ -11,7 +11,7 @@ import (
 const (
 	// packageName is the display name used in help output and as the client
 	// identity announced to MCP servers.
-	packageName = "mcp-explorer"
+	packageName = "mex"
 	// version is the client version announced to MCP servers.
 	version = "0.1.0"
 )
@@ -24,7 +24,7 @@ type UsageError struct {
 // Error implements the error interface.
 func (e *UsageError) Error() string { return e.Message }
 
-// Execute runs the mcp-explorer command line interface.
+// Execute runs the mex command line interface.
 func Execute() error {
 	return newRootCommand().Execute()
 }
@@ -33,7 +33,7 @@ func newRootCommand() *cobra.Command {
 	root := &cobra.Command{
 		Use:     packageName,
 		Short:   "CLI tool for exploring MCP servers",
-		Long:    "mcp-explorer explores, inspects, and invokes the tools, prompts, and resources exposed by Model Context Protocol (MCP) servers.",
+		Long:    "mex explores, inspects, and invokes the tools, prompts, and resources exposed by Model Context Protocol (MCP) servers.",
 		Version: version,
 	}
 	root.AddCommand(

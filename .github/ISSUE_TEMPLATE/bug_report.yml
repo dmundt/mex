@@ -1,12 +1,12 @@
 name: Bug report
-description: Report a bug in mcp-explorer
+description: Report a bug in mex
 labels: ["bug"]
 body:
   - type: input
     id: version
     attributes:
-      label: mcp-explorer version
-      description: Output of `mcp-explorer --version`
+      label: mex version
+      description: Output of `mex --version`
     validations:
       required: true
   - type: input
@@ -35,7 +35,7 @@ body:
     id: actual
     attributes:
       label: Actual output
-      description: What did mcp-explorer produce? Paste stdout/stderr or error output.
+      description: What did mex produce? Paste stdout/stderr or error output.
     validations:
       required: true
   - type: textarea

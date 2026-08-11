@@ -116,15 +116,15 @@ jobs:
           for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64; do
             os="${target%/*}"; arch="${target#*/}"; ext=""
             [ "$os" = windows ] && ext=".exe"
-            (cd cmd/mcp-explorer && GOOS=$os GOARCH=$arch CGO_ENABLED=0 \
-              go build -trimpath -ldflags "-s -w" -o "../../dist/mcp-explorer-${os}-${arch}${ext}" .)
+            (cd cmd/mex && GOOS=$os GOARCH=$arch CGO_ENABLED=0 \
+              go build -trimpath -ldflags "-s -w" -o "../../dist/mex-${os}-${arch}${ext}" .)
           done
 
       - name: package
         shell: bash
         run: |
           cd dist
-          for b in mcp-explorer-*; do
+          for b in mex-*; do
             base="${b%.exe}"
             zip -q "${base}.zip" "$b" ../LICENSE ../README.md
             rm "$b"

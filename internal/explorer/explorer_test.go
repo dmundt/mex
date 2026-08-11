@@ -32,7 +32,7 @@ func TestExecuteHelp(t *testing.T) {
 	if err := root.Execute(); err != nil {
 		t.Fatalf("Execute: %v", err)
 	}
-	if !strings.Contains(out.String(), "mcp-explorer") {
+	if !strings.Contains(out.String(), "mex") {
 		t.Errorf("help output missing tool name: %q", out.String())
 	}
 }
@@ -59,7 +59,7 @@ func TestUsageError(t *testing.T) {
 func TestExecute(t *testing.T) {
 	oldArgs := os.Args
 	t.Cleanup(func() { os.Args = oldArgs })
-	os.Args = []string{"mcp-explorer", "--version"}
+	os.Args = []string{"mex", "--version"}
 	if err := Execute(); err != nil {
 		t.Fatalf("Execute: %v", err)
 	}

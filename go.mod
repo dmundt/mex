@@ -1,4 +1,4 @@
-module github.com/dmundt/mcp-explorer
+module github.com/dmundt/mex
 
 go 1.26.5
 

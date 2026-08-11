@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/dmundt/mcp-explorer/internal/explorer"
+	"github.com/dmundt/mex/internal/explorer"
 )
 
 func main() {

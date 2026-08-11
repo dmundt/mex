@@ -1,6 +1,6 @@
-# mcp-explorer
+# mex
 
-[![CI](https://github.com/dmundt/mcp-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/dmundt/mcp-explorer/actions/workflows/ci.yml)
+[![CI](https://github.com/dmundt/mex/actions/workflows/ci.yml/badge.svg)](https://github.com/dmundt/mex/actions/workflows/ci.yml)
 
 A Go command-line tool for exploring, inspecting, and invoking the tools,
 prompts, and resources exposed by [Model Context Protocol (MCP)][mcp] servers,
@@ -12,7 +12,7 @@ in output formatting and exit behavior.
 ## Installation
 
 ```bash
-go install github.com/dmundt/mcp-explorer/cmd/mcp-explorer@latest
+go install github.com/dmundt/mex/cmd/mex@latest
 ```
 
 ## Usage
@@ -21,13 +21,13 @@ Every command takes a server URL (or a local stdio command line) as its
 first positional argument.
 
 ```
-mcp-explorer list URL
-mcp-explorer prompts URL
-mcp-explorer resources URL
-mcp-explorer inspect URL TOOL_NAME
-mcp-explorer call URL TOOL_NAME [ARGUMENTS_JSON]
-mcp-explorer info URL
-mcp-explorer doctor URL
+mex list URL
+mex prompts URL
+mex resources URL
+mex inspect URL TOOL_NAME
+mex call URL TOOL_NAME [ARGUMENTS_JSON]
+mex info URL
+mex doctor URL
 ```
 
 Common options:
@@ -41,7 +41,7 @@ Common options:
 List the tools exposed by an MCP server.
 
 ```
-mcp-explorer list https://example.com/mcp
+mex list https://example.com/mcp
 ```
 
 Adding `-N`/`--no-truncate` shows full descriptions and detailed parameters.
@@ -64,8 +64,8 @@ annotations, icons, and metadata.
 Call a tool with arguments from a JSON object and/or individual `-a` pairs.
 
 ```
-mcp-explorer call https://example.com/mcp my-tool '{"query": "hello"}'
-mcp-explorer call URL my-tool -a query hello -a limit 5
+mex call https://example.com/mcp my-tool '{"query": "hello"}'
+mex call URL my-tool -a query hello -a limit 5
 ```
 
 If `ARGUMENTS_JSON` is `-`, the JSON is read from standard input. Arguments
