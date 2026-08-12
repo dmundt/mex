@@ -1,6 +1,8 @@
 # mex
 
 [![CI](https://github.com/dmundt/mex/actions/workflows/ci.yml/badge.svg)](https://github.com/dmundt/mex/actions/workflows/ci.yml)
+[![Go version](https://img.shields.io/badge/Go-1.26-blue)](https://github.com/dmundt/mex)
+[![License](https://img.shields.io/github/license/dmundt/mex)](LICENSE)
 
 A Go command-line tool for exploring, inspecting, and invoking the tools,
 prompts, and resources exposed by [Model Context Protocol (MCP)][mcp] servers,
