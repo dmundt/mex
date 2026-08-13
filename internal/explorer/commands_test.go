@@ -357,6 +357,97 @@ func TestModeFlagConflict(t *testing.T) {
 	}
 }
 
+func TestResourcesCommandJSON(t *testing.T) {
+	fake := newFakeClient(nil, 10)
+	fake.resources = []*mcp.Resource{{Name: "cfg", URI: "docs://cfg"}}
+	installNewClient(t, fake)
+
+	cmd := newResourcesCommand()
+	out, err := executeCommand(cmd, "--json", "http://fake/mcp")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.HasPrefix(strings.TrimSpace(out), "[") {
+		t.Errorf("json resources output should be an array, got:\n%s", out)
+	}
+}
+
+func TestInspectCommandJSON(t *testing.T) {
+	fake := newFakeClient([]*mcp.Tool{sampleTool("alpha")}, 10)
+	installNewClient(t, fake)
+
+	cmd := newInspectCommand()
+	out, err := executeCommand(cmd, "--json", "http://fake/mcp", "alpha")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, `"name": "alpha"`) {
+		t.Errorf("json inspect output unexpected:\n%s", out)
+	}
+}
+
+func TestDoctorCommandJSON(t *testing.T) {
+	fake := newFakeClient([]*mcp.Tool{sampleTool("alpha")}, 10)
+	installNewClient(t, fake)
+
+	cmd := newDoctorCommand()
+	out, err := executeCommand(cmd, "--json", "http://fake/mcp")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, `"healthy": true`) {
+		t.Errorf("json doctor output unexpected:\n%s", out)
+	}
+}
+
+func TestInfoCommandClientError(t *testing.T) {
+	installNewClientErr(t, errors.New("connection refused"))
+	cmd := newInfoCommand()
+	if _, err := executeCommand(cmd, "http://bad/mcp"); err == nil {
+		t.Fatal("expected connection error")
+	}
+}
+
+func TestCallCommandEdgeCases(t *testing.T) {
+	fake := newFakeClient([]*mcp.Tool{sampleTool("alpha")}, 10)
+	fake.callDone = func(args map[string]any) *mcp.CallToolResult {
+		return &mcp.CallToolResult{Content: []mcp.Content{&mcp.TextContent{Text: "ok"}}}
+	}
+	installNewClient(t, fake)
+
+	// Wrong positional count.
+	for _, args := range [][]string{
+		{"http://fake/mcp"},
+		{"http://fake/mcp", "alpha", `{}`, "extra"},
+	} {
+		cmd := newCallCommand()
+		if _, err := executeCommand(cmd, args...); err == nil {
+			t.Errorf("args %v: expected usage error", args)
+		}
+	}
+
+	// stdin read failure.
+	cmd := newCallCommand()
+	cmd.SetIn(errReader{})
+	if _, err := executeCommand(cmd, "http://fake/mcp", "alpha", "-"); err == nil {
+		t.Error("expected stdin error")
+	}
+
+	// Argument that cannot be parsed for an integer parameter.
+	cmd = newCallCommand()
+	_, err := executeCommand(cmd, "http://fake/mcp", "alpha", "-a", "x", "notanint")
+	if err == nil || !strings.Contains(err.Error(), "must be valid JSON") {
+		t.Errorf("expected argument parse error, got %v", err)
+	}
+
+	// Tool lookup failure propagates through invokeTool.
+	fake.findError = errors.New("boom")
+	cmd = newCallCommand()
+	if _, err := executeCommand(cmd, "http://fake/mcp", "alpha"); err == nil || !strings.Contains(err.Error(), "boom") {
+		t.Errorf("expected find error, got %v", err)
+	}
+}
+
 func TestRunCommandErrors(t *testing.T) {
 	installNewClientErr(t, errors.New("connection refused"))
 

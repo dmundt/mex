@@ -151,6 +151,16 @@ func TestRenderResourceList(t *testing.T) {
 	}
 }
 
+func TestRenderResourceListMinimal(t *testing.T) {
+	got := renderResourceList([]*mcp.Resource{{Name: "bare", URI: "docs://bare"}})
+	if strings.Contains(got, "MIME type") || strings.Contains(got, "Size:") {
+		t.Errorf("minimal resource should not render mime/size lines:\n%s", got)
+	}
+	if !strings.Contains(got, "bare") || !strings.Contains(got, "docs://bare") {
+		t.Errorf("minimal resource missing heading/uri:\n%s", got)
+	}
+}
+
 func TestRenderCallResult(t *testing.T) {
 	tests := []struct {
 		name   string

@@ -22,6 +22,7 @@ type fakeClient struct {
 	callError error
 	callDone  func(args map[string]any) *mcp.CallToolResult
 	listError error
+	findError error
 }
 
 var _ MCPClient = (*fakeClient)(nil)
@@ -93,6 +94,9 @@ func (f *fakeClient) ListResourcesPage(ctx context.Context, cursor string) ([]*m
 }
 
 func (f *fakeClient) FindTool(ctx context.Context, name string) (*mcp.Tool, error) {
+	if f.findError != nil {
+		return nil, f.findError
+	}
 	for _, tool := range f.tools {
 		if tool.Name == name {
 			return tool, nil

@@ -105,7 +105,11 @@ func integer(v any) (int64, bool) {
 	if !ok {
 		return 0, false
 	}
-	return int64(f), true
+	i := int64(f)
+	if float64(i) != f {
+		return 0, false
+	}
+	return i, true
 }
 
 // numString formats a float64 the way Python would print a JSON number.

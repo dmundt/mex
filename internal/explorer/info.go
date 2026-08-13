@@ -59,7 +59,7 @@ func rawDiscoverSupportedVersions(ctx context.Context, url, requestedVersion str
 	if err != nil {
 		return nil, err
 	}
-	id, err := jsonrpc.MakeID(1)
+	id, err := jsonrpc.MakeID(float64(1))
 	if err != nil {
 		return nil, err
 	}
