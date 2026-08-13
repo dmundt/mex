@@ -71,7 +71,15 @@ func parseCallArgs(args []string) (callArgs, error) {
 	return out, nil
 }
 
-// isOption reports whether a token looks like a command-line option.
+// isOption reports whether a token looks like a command-line option. Tokens
+// that start with a minus sign followed by a digit (negative numbers) are
+// treated as positional values.
 func isOption(arg string) bool {
-	return len(arg) > 1 && arg[0] == '-'
+	if len(arg) < 2 || arg[0] != '-' {
+		return false
+	}
+	if arg[1] >= '0' && arg[1] <= '9' {
+		return false
+	}
+	return true
 }

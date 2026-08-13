@@ -299,6 +299,9 @@ func writeCallJSON(cmd *cobra.Command, result *mcp.CallToolResult) error {
 			fmt.Fprintln(cmd.OutOrStdout(), text.Text)
 			return nil
 		}
+		// Non-text content (images, audio, embedded resources): emit the
+		// complete result so the payload is not lost.
+		return writeJSON(cmd, result)
 	}
 	fmt.Fprintln(cmd.OutOrStdout(), "null")
 	return nil

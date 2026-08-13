@@ -302,9 +302,11 @@ func renderCallResult(result *mcp.CallToolResult) string {
 			fmt.Fprintf(&b, "[resource: %s (%s)]\n", c.Name, c.URI)
 		case *mcp.EmbeddedResource:
 			resource := c.Resource
-			if resource != nil && len(resource.Blob) == 0 {
+			if resource == nil {
+				b.WriteString("[resource: (unknown)]\n")
+			} else if len(resource.Blob) == 0 {
 				b.WriteString(resource.Text + "\n")
-			} else if resource != nil {
+			} else {
 				mimeType := resource.MIMEType
 				if mimeType == "" {
 					mimeType = "application/octet-stream"

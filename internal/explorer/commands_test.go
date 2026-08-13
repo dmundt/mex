@@ -207,6 +207,25 @@ func TestCallCommand(t *testing.T) {
 	}
 }
 
+func TestCallCommandJSONImageContent(t *testing.T) {
+	fake := newFakeClient([]*mcp.Tool{sampleTool("alpha")}, 10)
+	fake.callDone = func(args map[string]any) *mcp.CallToolResult {
+		return &mcp.CallToolResult{Content: []mcp.Content{
+			&mcp.ImageContent{MIMEType: "image/png", Data: []byte("abcd")},
+		}}
+	}
+	installNewClient(t, fake)
+
+	cmd := newCallCommand()
+	out, err := executeCommand(cmd, "http://fake/mcp", "alpha", "--json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out, `"mimeType"`) {
+		t.Errorf("json image call output should include the full result, got %q", out)
+	}
+}
+
 func TestCallCommandStdin(t *testing.T) {
 	fake := newFakeClient([]*mcp.Tool{sampleTextTool("alpha")}, 10)
 	fake.callDone = func(args map[string]any) *mcp.CallToolResult {

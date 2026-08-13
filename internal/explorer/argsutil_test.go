@@ -52,6 +52,11 @@ func TestParseCallArgs(t *testing.T) {
 			wantPos: []string{"http://x", "tool", "--json"},
 		},
 		{
+			name:    "negative number positional",
+			args:    []string{"http://x", "tool", "-5"},
+			wantPos: []string{"http://x", "tool", "-5"},
+		},
+		{
 			name:    "unknown option",
 			args:    []string{"--bogus", "http://x", "tool"},
 			wantErr: "No such option: --bogus",

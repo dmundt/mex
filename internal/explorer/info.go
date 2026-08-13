@@ -14,7 +14,6 @@ type discoverResponse struct {
 	SupportedVersions []string                `json:"supportedVersions"`
 	Capabilities      *mcp.ServerCapabilities `json:"capabilities"`
 	Instructions      string                  `json:"instructions"`
-	Meta              map[string]any          `json:"_meta,omitempty"`
 }
 
 // fetchServerInfo returns protocol and server metadata for the selected mode.

@@ -212,6 +212,13 @@ func TestRenderCallResult(t *testing.T) {
 			want: "[resource: docs://c, image/png, 2 base64 characters]\n",
 		},
 		{
+			name: "embedded nil resource",
+			result: &mcp.CallToolResult{Content: []mcp.Content{
+				&mcp.EmbeddedResource{},
+			}},
+			want: "[resource: (unknown)]\n",
+		},
+		{
 			name: "unknown content type falls to JSON",
 			result: &mcp.CallToolResult{Content: []mcp.Content{
 				&mcp.ToolUseContent{Name: "t", Input: map[string]any{"a": float64(1)}}, //nolint:staticcheck // deprecated in SDK; still a valid content type

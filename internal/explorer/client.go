@@ -163,19 +163,30 @@ func (c *mcpClient) ListResourcesPage(ctx context.Context, cursor string) ([]*mc
 	return res.Resources, res.NextCursor, nil
 }
 
-// FindTool implements MCPClient. It follows pagination through listAllTools,
-// which fails fast if the server repeats a cursor.
+// FindTool implements MCPClient. It pages through tools, returning early when
+// the named tool is found, and fails fast if the server repeats a cursor.
 func (c *mcpClient) FindTool(ctx context.Context, name string) (*mcp.Tool, error) {
-	tools, err := listAllTools(ctx, c)
-	if err != nil {
-		return nil, err
-	}
-	for _, tool := range tools {
-		if tool.Name == name {
-			return tool, nil
+	seenCursors := map[string]bool{}
+	cursor := ""
+	for {
+		tools, next, err := c.ListToolsPage(ctx, cursor)
+		if err != nil {
+			return nil, err
 		}
+		for _, tool := range tools {
+			if tool.Name == name {
+				return tool, nil
+			}
+		}
+		cursor = next
+		if cursor == "" {
+			return nil, nil
+		}
+		if seenCursors[cursor] {
+			return nil, fmt.Errorf("server repeated pagination cursor %q", cursor)
+		}
+		seenCursors[cursor] = true
 	}
-	return nil, nil
 }
 
 // CallTool implements MCPClient.

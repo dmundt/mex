@@ -38,7 +38,7 @@ func buildArguments(inputSchema map[string]any, argumentsJSON *string, argumentP
 		var parsed any
 		if err := json.Unmarshal([]byte(*argumentsJSON), &parsed); err != nil {
 			return nil, &UsageError{
-				Message: fmt.Sprintf("Raw arguments must be valid JSON: %s", jsonErrorText(err)),
+				Message: fmt.Sprintf("Raw arguments must be valid JSON: %s", err),
 			}
 		}
 		var ok bool
@@ -70,11 +70,6 @@ func buildArguments(inputSchema map[string]any, argumentsJSON *string, argumentP
 		return nil, err
 	}
 	return arguments, nil
-}
-
-// jsonErrorText returns the message portion of a json syntax error.
-func jsonErrorText(err error) string {
-	return err.Error()
 }
 
 // validateArguments checks arguments against the input schema.
