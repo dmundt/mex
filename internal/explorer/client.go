@@ -53,6 +53,9 @@ type ClientOptions struct {
 	// ProtocolVersion is the MCP protocol version to request. If empty, the
 	// SDK's latest version is used.
 	ProtocolVersion string
+	// Context is the connection's context, used for the connect handshake.
+	// If nil, context.Background is used.
+	Context context.Context
 }
 
 // MCPClient is the interface used by commands to interact with an MCP server.
@@ -108,17 +111,26 @@ func buildInfo(session *mcp.ClientSession, url, requestedVersion string) Info {
 		Negotiation:     "initialize",
 		ProtocolVersion: requestedVersion,
 	}
-	if requestedVersion >= statelessProtocolVersion {
-		info.Mode = "stateless"
-		info.Negotiation = "server/discover"
-	}
 	if ir := session.InitializeResult(); ir != nil {
 		info.ProtocolVersion = ir.ProtocolVersion
 		info.ServerInfo = ir.ServerInfo
 		info.Capabilities = ir.Capabilities
 		info.Instructions = ir.Instructions
 	}
+	// The mode reflects what was actually negotiated, not just what was
+	// requested: a stateless request falls back to the legacy initialize
+	// handshake when the server does not support server/discover.
+	info.Mode, info.Negotiation = modeFromVersion(info.ProtocolVersion)
 	return info
+}
+
+// modeFromVersion returns the mode and negotiation mechanism corresponding to a
+// negotiated protocol version.
+func modeFromVersion(version string) (mode, negotiation string) {
+	if version >= statelessProtocolVersion {
+		return "stateless", "server/discover"
+	}
+	return "legacy", "initialize"
 }
 
 // Info implements MCPClient.
@@ -184,7 +196,11 @@ var NewClient = func(opts ClientOptions) (MCPClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	return Connect(context.Background(), transport, opts)
+	ctx := opts.Context
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return Connect(ctx, transport, opts)
 }
 
 // isHTTPURL reports whether url identifies a streamable HTTP server.

@@ -19,7 +19,7 @@ type discoverResponse struct {
 
 // fetchServerInfo returns protocol and server metadata for the selected mode.
 func fetchServerInfo(ctx context.Context, url string, protocolVersion string) (Info, error) {
-	client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion})
+	client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion, Context: ctx})
 	if err != nil {
 		return Info{}, err
 	}

@@ -326,6 +326,18 @@ func TestDoctorCommandUnhealthy(t *testing.T) {
 	}
 }
 
+func TestModeFlagConflict(t *testing.T) {
+	cmd := newListCommand()
+	_, err := executeCommand(cmd, "--stateless", "--legacy", "http://fake/mcp")
+	if err == nil {
+		t.Fatal("expected usage error for --stateless --legacy")
+	}
+	var ue *UsageError
+	if !errors.As(err, &ue) {
+		t.Fatalf("error = %T %v, want *UsageError", err, err)
+	}
+}
+
 func TestRunCommandErrors(t *testing.T) {
 	installNewClientErr(t, errors.New("connection refused"))
 

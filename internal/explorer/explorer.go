@@ -75,6 +75,14 @@ func addCommonFlags(cmd *cobra.Command, o *commonOptions) {
 	cmd.Flags().BoolVar(&o.jsonOutput, "json", false, "Output JSON.")
 	cmd.Flags().BoolVar(&o.stateless, "stateless", false, "Force the stateless MCP server/discover protocol (default).")
 	cmd.Flags().BoolVar(&o.legacy, "legacy", false, "Force the legacy initialize handshake protocol.")
+	if cmd.PreRunE == nil {
+		cmd.PreRunE = func(_ *cobra.Command, _ []string) error {
+			if o.legacy && o.stateless {
+				return &UsageError{Message: "--stateless and --legacy cannot be used together."}
+			}
+			return nil
+		}
+	}
 }
 
 // exactArgs wraps cobra.ExactArgs so that argument-count misuse reports an

@@ -83,7 +83,7 @@ func runDoctorCheck(ctx context.Context, url string, stateless, selected bool) d
 		return check
 	}
 
-	client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion})
+	client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion, Context: ctx})
 	if err != nil {
 		return fail(err)
 	}

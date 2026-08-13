@@ -147,6 +147,17 @@ func TestPaginationCycleDetected(t *testing.T) {
 	}
 }
 
+func TestModeFromVersion(t *testing.T) {
+	mode, negotiation := modeFromVersion(statelessProtocolVersion)
+	if mode != "stateless" || negotiation != "server/discover" {
+		t.Errorf("modeFromVersion(stateless) = %q/%q", mode, negotiation)
+	}
+	mode, negotiation = modeFromVersion(legacyProtocolVersion)
+	if mode != "legacy" || negotiation != "initialize" {
+		t.Errorf("modeFromVersion(legacy) = %q/%q", mode, negotiation)
+	}
+}
+
 func TestWriteJSON(t *testing.T) {
 	var sb strings.Builder
 	cmd := newRootCommand()

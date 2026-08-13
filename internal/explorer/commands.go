@@ -34,7 +34,7 @@ func newListCommand() *cobra.Command {
 		Args:  exactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			url := args[0]
-			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion()})
+			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion(), Context: cmd.Context()})
 			if err != nil {
 				return err
 			}
@@ -62,7 +62,7 @@ func newPromptsCommand() *cobra.Command {
 		Args:  exactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			url := args[0]
-			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion()})
+			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion(), Context: cmd.Context()})
 			if err != nil {
 				return err
 			}
@@ -89,7 +89,7 @@ func newResourcesCommand() *cobra.Command {
 		Args:  exactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			url := args[0]
-			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion()})
+			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion(), Context: cmd.Context()})
 			if err != nil {
 				return err
 			}
@@ -116,7 +116,7 @@ func newInspectCommand() *cobra.Command {
 		Args:  exactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			url, name := args[0], args[1]
-			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion()})
+			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: common.protocolVersion(), Context: cmd.Context()})
 			if err != nil {
 				return err
 			}
@@ -183,7 +183,7 @@ func newCallCommand() *cobra.Command {
 				protocolVersion = legacyProtocolVersion
 			}
 
-			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion})
+			client, err := NewClient(ClientOptions{URL: url, ProtocolVersion: protocolVersion, Context: cmd.Context()})
 			if err != nil {
 				return err
 			}

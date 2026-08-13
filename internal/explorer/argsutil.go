@@ -64,6 +64,9 @@ func parseCallArgs(args []string) (callArgs, error) {
 		}
 	}
 
+	if out.stateless && out.legacy {
+		return callArgs{}, fmt.Errorf("--stateless and --legacy cannot be used together")
+	}
 	out.positionals = positionals
 	return out, nil
 }

@@ -66,6 +66,11 @@ func TestParseCallArgs(t *testing.T) {
 			args:     []string{"-h"},
 			wantHelp: true,
 		},
+		{
+			name:    "stateless and legacy conflict",
+			args:    []string{"--stateless", "--legacy", "http://x", "tool"},
+			wantErr: "cannot be used together",
+		},
 	}
 
 	for _, tt := range tests {
