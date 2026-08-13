@@ -26,10 +26,11 @@ const (
 // invocation to complete multiple requests over one connection.
 var httpClient = &http.Client{
 	Transport: &http.Transport{
-		DialContext:         (&net.Dialer{Timeout: 10 * time.Second}).DialContext,
-		MaxIdleConns:        100,
-		MaxIdleConnsPerHost: 100,
-		IdleConnTimeout:     90 * time.Second,
+		DialContext:           (&net.Dialer{Timeout: 10 * time.Second}).DialContext,
+		MaxIdleConns:          100,
+		MaxIdleConnsPerHost:   100,
+		IdleConnTimeout:       90 * time.Second,
+		ResponseHeaderTimeout: 30 * time.Second,
 	},
 }
 
@@ -150,24 +151,19 @@ func (c *mcpClient) ListResourcesPage(ctx context.Context, cursor string) ([]*mc
 	return res.Resources, res.NextCursor, nil
 }
 
-// FindTool implements MCPClient.
+// FindTool implements MCPClient. It follows pagination through listAllTools,
+// which fails fast if the server repeats a cursor.
 func (c *mcpClient) FindTool(ctx context.Context, name string) (*mcp.Tool, error) {
-	cursor := ""
-	for {
-		tools, next, err := c.ListToolsPage(ctx, cursor)
-		if err != nil {
-			return nil, err
-		}
-		for _, tool := range tools {
-			if tool.Name == name {
-				return tool, nil
-			}
-		}
-		cursor = next
-		if cursor == "" {
-			return nil, nil
+	tools, err := listAllTools(ctx, c)
+	if err != nil {
+		return nil, err
+	}
+	for _, tool := range tools {
+		if tool.Name == name {
+			return tool, nil
 		}
 	}
+	return nil, nil
 }
 
 // CallTool implements MCPClient.

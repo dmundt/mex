@@ -14,18 +14,32 @@ func main() {
 	if err == nil {
 		return
 	}
+	code, message := classifyError(err)
+	if message != "" {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", message)
+	}
+	os.Exit(code)
+}
+
+// classifyError maps an error to its exit code and the message to print ("" for
+// errors that exit silently, like ExitCodeError).
+func classifyError(err error) (code int, message string) {
+	if err == nil {
+		return 0, ""
+	}
 	var usageErr *explorer.UsageError
 	if errors.As(err, &usageErr) {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", usageErr)
-		os.Exit(2)
+		return 2, usageErr.Message
+	}
+	var exitCodeErr *explorer.ExitCodeError
+	if errors.As(err, &exitCodeErr) {
+		return exitCodeErr.Code, ""
 	}
 	msg := err.Error()
 	if isFlagError(msg) {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", msg)
-		os.Exit(2)
+		return 2, msg
 	}
-	fmt.Fprintf(os.Stderr, "Error: %s\n", msg)
-	os.Exit(1)
+	return 1, msg
 }
 
 // isFlagError reports whether the message looks like the error text produced by

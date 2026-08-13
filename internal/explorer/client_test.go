@@ -119,6 +119,34 @@ func TestMCPClientMethods(t *testing.T) {
 	}
 }
 
+// repeatingCursorClient is an MCPClient whose ListToolsPage always returns the
+// same non-empty cursor, which would loop forever without cycle detection.
+type repeatingCursorClient struct{}
+
+func (repeatingCursorClient) Info() Info { return Info{} }
+func (repeatingCursorClient) ListToolsPage(context.Context, string) ([]*mcp.Tool, string, error) {
+	return nil, "loop", nil
+}
+func (repeatingCursorClient) ListPromptsPage(context.Context, string) ([]*mcp.Prompt, string, error) {
+	return nil, "loop", nil
+}
+func (repeatingCursorClient) ListResourcesPage(context.Context, string) ([]*mcp.Resource, string, error) {
+	return nil, "loop", nil
+}
+func (repeatingCursorClient) FindTool(context.Context, string) (*mcp.Tool, error) { return nil, nil }
+func (repeatingCursorClient) CallTool(context.Context, string, map[string]any) (*mcp.CallToolResult, error) {
+	return nil, nil
+}
+func (repeatingCursorClient) Close() error { return nil }
+
+func TestPaginationCycleDetected(t *testing.T) {
+	ctx := context.Background()
+	_, err := listAllTools(ctx, repeatingCursorClient{})
+	if err == nil || !strings.Contains(err.Error(), "repeated pagination cursor") {
+		t.Fatalf("listAllTools error = %v, want repeated cursor error", err)
+	}
+}
+
 func TestWriteJSON(t *testing.T) {
 	var sb strings.Builder
 	cmd := newRootCommand()

@@ -79,23 +79,29 @@ func jsonErrorText(err error) string {
 
 // validateArguments checks arguments against the input schema.
 func validateArguments(inputSchema map[string]any, arguments map[string]any) error {
+	// Copy the schema before mutating it so the caller's map is left intact.
+	copiedSchema := make(map[string]any, len(inputSchema))
+	for key, value := range inputSchema {
+		copiedSchema[key] = value
+	}
+
 	// Normalize an unsupported $schema URI so legacy server schemas still
 	// validate. The jsonschema-go package understands draft-07 and draft
 	// 2020-12; other URIs default to 2020-12 when omitted.
-	if v, ok := inputSchema["$schema"].(string); ok {
+	if v, ok := copiedSchema["$schema"].(string); ok {
 		switch v {
 		case "http://json-schema.org/draft-07/schema#",
 			"https://json-schema.org/draft-07/schema#",
 			"https://json-schema.org/draft/2020-12/schema":
 			// supported as-is
 		case "https://json-schema.org/draft/2020-12/schema#":
-			inputSchema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
+			copiedSchema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
 		default:
-			delete(inputSchema, "$schema")
+			delete(copiedSchema, "$schema")
 		}
 	}
 
-	data, err := json.Marshal(inputSchema)
+	data, err := json.Marshal(copiedSchema)
 	if err != nil {
 		return &UsageError{Message: fmt.Sprintf("Tool input schema is invalid: %s", err)}
 	}
